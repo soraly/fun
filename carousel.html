@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src='http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 300px;
+            height: 200px;
+            overflow: hidden;
+            border: 1px solid gray;
+            position: relative;
+        }
+
+        p {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            position: absolute;
+        }
+
+        #p1 {
+            background: salmon;
+        }
+
+        #p2 {
+            background: yellowgreen;
+            left: 100%;
+        }
+
+        #p3 {
+            background: forestgreen;
+            left: 100%;
+        }
+
+        i {
+            width: 25px;
+            height: 50px;
+            background: firebrick;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        i.left {
+            left: 0;
+        }
+
+        i.right {
+            right: 0;
+        }
+
+        #cursors {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+        }
+
+        a {
+            padding: 4px;
+            margin-right: 10px;
+            background: #fff;
+            text-decoration: none;
+        }
+        a.active {
+            background: yellow;
+            color: fuchsia;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='container'>
+        <p id='p1'>p1</p>
+        <p id='p2'>p2</p>
+        <p id='p3'>p3</p>
+        <div id='cursors'>
+            <a index='0' class='active' href="javascript:;">1</a>
+            <a index='1' href="javascript:;">2</a>
+            <a index='2' href="javascript:;">3</a>
+        </div>
+        <i class='left'></i>
+        <i class='right'></i>
+    </div>
+    <script>
+        $('a').click(debunce(jump, 500, true))
+        function jump() {
+            var index = this.getAttribute('index');
+            $('a').eq(index).addClass('active').siblings().removeClass('active')
+            if (inow != index) {
+                $('#container p').eq(inow).animate({ 'left': '-100%' }, 500);
+                $('#container p ').eq(index).css({ 'left': '100%' });
+                $('#container p').eq(index).animate({ 'left': '0px' }, 500);
+                inow = index;
+            }
+        }
+        $('#container').mouseover(() => {
+            clearInterval(time);
+        }).mouseout(() => {
+            time = setInterval(change, 1800);
+        })
+        $('.left').click(debunce(leftChange, 500, true))
+        $('.right').click(debunce(change, 500, true))
+
+        function debunce(fn, delay, immediate) {
+            var timer = null;
+            
+            return function () {
+                var context = this;
+                console.log(context,'context')
+                if (timer) clearTimeout(timer)
+                if (immediate) {
+                    //根据距离上次触发操作的时间是否到达delay来决定是否要现在执行函数
+                    var doNow = !timer;
+                    //每一次都重新设置timer，就是要保证每一次执行的至少delay秒后才可以执行
+                    timer = setTimeout(function () {
+                        timer = null;
+                    }, delay);
+                    //立即执行
+                    if (doNow) {
+                        fn.apply(context)
+                        // fn()
+                    }
+                } else {
+                    timer = setTimeout(function () {
+                        fn()
+                    }, delay);
+                }
+            }
+        }
+
+        function leftChange() {
+            $('#container p').eq(inow).animate({ 'left': '100%' }, 500);
+            inow--;
+            inow = inow % 3;
+            $('a').eq(inow).attr('class','active').siblings().removeClass();
+            $('#container p ').eq(inow).css({ 'left': '-100%' });
+            $('#container p').eq(inow).animate({ 'left': '0px' }, 500);
+        }
+        var time = setInterval(change, 1800);
+        var inow = 0;
+        function change() {
+            $('#container p').eq(inow).animate({ 'left': '-100%' }, 500);
+            inow++;
+            inow = inow % 3;
+            $('a').eq(inow).attr('class','active').siblings().removeClass();
+            $('#container p ').eq(inow).css({ 'left': '100%' });
+            $('#container p').eq(inow).animate({ 'left': '0px' }, 500);
+        }
+    </script>
+</body>
+
+</html>
