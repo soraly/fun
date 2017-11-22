@@ -93,7 +93,7 @@
         <i class='right'></i>
     </div>
     <script>
-        $('a').click(debunce(jump, 500, true))
+        $('a').click(debunce(jump, 500, true))/$ 
         function jump() {
             var index = this.getAttribute('index');
             $('a').eq(index).addClass('active').siblings().removeClass('active')

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //柯里化又称部分求值，字面意思就是不会立刻求值，而是到了需要的时候再去求值.反柯里化的作用是，当我们调用某个方法，不用考虑这个对象在被设计时，是否拥有这个方法，只要这个方法适用于它，我们就可以对这个对象使用它。
+        //Curry 的核心思想是把多参数传入的函数拆成单参数（或部分）函数，内部再返回调用下一个单参数（或部分）函数，依次处理剩余的参数。
+        //应用场景：1.
+        var currying = function (fn) {
+            var args = Array.prototype.slice.call(arguments, 1); //获取第二个(或更多)参数，此处为 必要的小米
+            return function () {
+                var in_args = Array.prototype.slice.call(arguments); //将子函数调用时的参数转换为数组
+                fn.apply(null, args.concat(in_args)); //将第一步和第二部获得参数合并后给fn调用
+            }
+        }
+        var showTotal = function () {
+            var str = [].join.call(arguments, ';');
+            console.log(str)
+        }
+        var fn = currying(showTotal, '必要的小米');
+        //这样调用的好处就是参数复用，'必要的小米'这个参数可以避免多次传入
+        fn('橘子', '香蕉', '苹果'); //==>必要的小米;橘子;香蕉;苹果
+        fn('辣椒', '花生', '葡萄'); //==>必要的小米;辣椒;花生;葡萄
+
+        //升级版
+        //有时候应用中，同一种规则可能会反复使用，这就可能会造成代码的重复性。例如：
+        function square(i) {
+            return i * i;
+        }
+
+        function dubble(i) {
+            return i *= 2;
+        }
+
+        function map(handeler, list) {
+            return list.map(handeler);
+        }
+
+        // 数组的每一项平方
+        map(square, [1, 2, 3, 4, 5]);
+        map(square, [6, 7, 8, 9, 10]);
+        map(square, [10, 20, 30, 40, 50]);
+        // ......
+
+        // 数组的每一项加倍
+        map(dubble, [1, 2, 3, 4, 5]);
+        map(dubble, [6, 7, 8, 9, 10]);
+        map(dubble, [10, 20, 30, 40, 50]);
+
+
+        //利用柯里化改造一下： 把处理函数单独提取出来，重复利用。
+        //柯里化不仅仅是提高了代码的合理性，更重的它突出一种思想---降低适用范围，提高适用性。
+        var add = function (i, step) {
+            return (+i) + 10
+        }
+        var multiplication = function (i, step) {
+            return (+i) * 2
+        }
+        var dealTotal = function (handler, list) {
+            list = list.map(handler);
+            console.log(list, 'list');
+        }
+        var mapadd = currying(dealTotal, add);
+        mapadd([1, 2, 3, 4])
+        mapadd([5, 6, 7, 8])
+        mapadd([10, 20, 30, 40, 50])
+
+        var mapmulti = currying(dealTotal, multiplication);
+        mapmulti([1, 2, 3, 4])
+        mapmulti([5, 6, 7, 8])
+        mapmulti([10, 20, 30, 40, 50])
+
+        //2 延迟执行。柯里化的另一个应用场景是延迟执行。不断的柯里化，累积传入的参数，最后执行。
+        //利用闭包的特性,_args是被引用的内部变量，所以函数多次调用，该变量也不会被销毁。每次调用，args会被推入一个参数，到最后再累加
+        var add = function () {
+            var _this = this,
+                _args = arguments
+            return function () {
+                if (!arguments.length) {
+                    var sum = 0;
+                    for (var i = 0, c; c = _args[i++];) sum += c
+                    return sum
+                } else {
+                    Array.prototype.push.apply(_args, arguments)
+                    return arguments.callee
+                }
+            }
+        }
+        var nums = add(1)(2)(3)(4)()
+        console.log(nums, 'nums') //==>10
+
+        //通用写法
+        var curry = function (fn) {
+            var _args = []
+            return function cb() {
+                if (arguments.length == 0) {
+                    return fn.apply(this, _args)
+                }
+                Array.prototype.push.apply(_args, arguments);
+                return cb;
+            }
+        }
+
+        var add2 = function () {
+            var total = 0;
+            total = Array.prototype.reduce.call(arguments, (num1, num2) => {
+                return num1 + num2
+            })
+            return total
+        }
+        console.log(curry(add2)(1)(2)(3)(4)())
+
+        //3 固定易变因素。柯里化特性决定了它这应用场景。提前把易变因素，传参固定下来，生成一个更明确的应用函数。最典型的代表应用，是bind函数用以固定this这个易变对象。
+        Function.prototype.bind = function (context) {
+            var _this = this,
+                _args = Array.prototype.slice.call(arguments, 1);
+            return function () {
+                return _this.apply(context, _args.concat(Array.prototype.slice.call(arguments)))
+            }
+        }
+        var obj = {name:'xiang'}
+        var hello = (function (address,age){
+            console.log(this.name,arguments)
+        }).bind(obj,1,2,3)
+        hello('cx',20)
+    </script>
+</body>
+
+</html>

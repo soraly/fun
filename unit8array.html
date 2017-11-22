@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    var oReq = new XMLHttpRequest();
+    var url = './hello.txt'
+    // oReq.open("GET", "./hello.txt", true);
+    // oReq.responseType = "arraybuffer";
+
+    // oReq.onload = function (oEvent) {
+    //     var arrayBuffer = oReq.response; // 注意:不是oReq.responseText
+    //     console.log(arrayBuffer, 'arrayBuffer')
+    //     if (arrayBuffer) {
+    //         var byteArray = new Int8Array(arrayBuffer);
+    //         var byteArray2 = new Uint16Array(arrayBuffer);
+            
+    //         for (var i = 0; i < byteArray.byteLength; i++) {
+    //             // 对数组中的每个字节进行操作
+    //         }
+    //     }
+    // };
+    // oReq.send(null);
+
+    function load_binary_resource(url) {
+        var req = new XMLHttpRequest();
+        req.open('GET', url, false);
+        //XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com]
+        req.overrideMimeType('text/plain; charset=utf-8');
+        req.send(null);
+        if (req.status != 200) return '';
+        return req;
+    }
+    var res = load_binary_resource(url)
+    console.log(res)
+
+</script>
+
+</html>
