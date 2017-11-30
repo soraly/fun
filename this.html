@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var name = 'A';
+        var getName = function(a,b,c,d){
+            var args = arguments.callee;
+            var caller = getName.caller;
+            return this.name
+        }
+        var obj = {
+            name: 'B',
+            getName: function(){
+                return this.name;
+            },
+            showName: function(a){
+                console.log(getName()); //A
+                console.log(a()); //A
+                console.log(this.getName()); //B
+                arguments.name = 'lzx';
+                console.log(arguments[0].call(obj)); //undefined
+            }
+        }
+        obj.showName(getName,222)
+    </script>
+</body>
+</html>

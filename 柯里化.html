@@ -129,7 +129,10 @@
         var hello = (function (address,age){
             console.log(this.name,arguments)
         }).bind(obj,1,2,3)
-        hello('cx',20)
+        hello('hangzhou',20)    
+        //反柯里化
+        //http://www.cnblogs.com/hustskyking/archive/2013/04/09/uncurrying.html
+        //http://www.cnblogs.com/pigtail/p/3450852.html
     </script>
 </body>
 
