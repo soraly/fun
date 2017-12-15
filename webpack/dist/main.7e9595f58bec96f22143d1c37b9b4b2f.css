@@ -1,0 +1,13 @@
+body {
+  font-size: 16px; }
+  body .block {
+    border: 1px solid skyblue;
+    width: 300px;
+    height: 100px;
+    display: flex;
+    flex-wrap: wrap; }
+    body .block a {
+      width: 25%;
+      height: 50px;
+      box-sizing: border-box;
+      border: 1px solid #8ad34e; }
