@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var str = 'asdfasdf23fffff42f34dda55433adcsdff';
+        var str_arr = str.split(''), obj = {};
+        str_arr.forEach((item) => {
+            obj[item] ? obj[item]++ : (obj[item] = 1)
+        })
+        console.log(obj)
+
+        var str = 'asdfasdf23fffff42f34dda55433adcsdff';
+        var obj2 = str.split('').reduce((r, v) => {
+            if(r[0].has(v)){
+                r[1][v] ++;
+            }else {
+                r[1][v] = 1;
+                r[0].add(v);
+            }
+            return r;
+        }, [new Set, {}])[1]
+        console.log(obj2)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var obj = {
+            a: {
+                aa: {},
+                bb: {
+                    aaa: {},
+                    bbb: {
+                        aaaa: {
+                            aaaaa: {
+                                a: 10
+                            }
+                        },
+                        bbbb: {
+                            aaaaa: function () { }
+                        },
+                        cccc: {
+                            ccccc: {
+                                c: 10,
+                                dddd: {
+                                    a: 10
+                                }
+                            }
+                        }
+                    }
+                },
+                cccc: {
+                    d: {
+                        c: {
+                            d: {
+                                f: {
+                                    df: {
+                                        ffffff: 10,
+                                        ggg: {
+                                            ggg: {
+                                                ggg: {
+                                                    a: 123456
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            b: {},
+            c: {
+                d: {
+                    c: {
+                        d: {
+                            f: {
+                                df: {
+                                    ffffff: 'bla',
+                                    ggg: {
+                                        aaa: 10,
+                                        fff: {
+                                            a: 10,
+                                            ggg: {
+                                                a: [
+                                                    [
+                                                        1
+                                                    ]
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        function notEmptyObject(obj) {
+            if(Object.prototype.toString.call(obj)==='[object Object]'){
+                if(Object.keys(obj).length){
+                    return true
+                }else {
+                    return false
+                }
+            }else {
+                return false
+            }
+        }
+
+        (function deep(obj, len = 0) {
+
+            var arr = [];
+
+            if (obj instanceof Array) {
+
+                for (var i of obj) {
+
+                    for (var n in i) {
+                        if (notEmptyObject(i[n])) {
+
+                            arr.push(i[n]);
+
+                        }
+                    }
+                }
+
+            } else {
+
+                for (var i in obj) {
+
+                    if (notEmptyObject(obj[i])) {
+
+                        arr.push(obj[i]);
+                    }
+
+                }
+            }
+
+            if (arr.length) {
+
+                len++;
+                deep(arr, len);
+            } else {
+                console.log(len);
+            }
+
+        })(obj)
+    </script>
+</body>
+
+</html>

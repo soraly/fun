@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+    在这种情况下，View Box跨度从0,0到50,20。这意味着，500 x 200像素 <svg>元素内部使用一个坐标系，它从0,0 到50,20。
+    换言之，图形中使用的坐标，每1个单位，在<svg>对应于宽度500/50 = 10个像素，而在高200/20 = 10个像素。这就是为什么
+    x轴为20及y轴为10的位置的矩形是真正位于（200,100），其宽度（10）和高度（5）对应于100个像素和50个像素。
+    
+    另一种方式来解释它，viewBox属性的前两个坐标定义的是<svg>左上角的用户坐标，后两个坐标定义的是<svg>右下角的用户坐标。
+    该<svg>内部的空间被解释为从左上角坐标到右下角坐标跨越。
+     -->
+    <svg  xmlns="http://www.w3.org/2000/svg" version="1.1" width='300px' height='300px' viewBox='0 0 30 30' >
+        <circle cx="10" cy="10" r="5" stroke="black" stroke-width="0.2" fill="skyblue" />
+                <!-- <circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" /> -->
+    </svg>
+    <svg  xmlns="http://www.w3.org/2000/svg" version="1.1" width='300px' height='300px'  >
+        <circle cx="100" cy="100" r="50" stroke="black" stroke-width="2" fill="skyblue" />
+                <!-- <circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" /> -->
+    </svg>
+    
+</body>
+</html>
