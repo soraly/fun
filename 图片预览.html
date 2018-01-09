@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src='http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'></script>
+</head>
+
+<body>
+
+    <div>
+        <input type="file" id='input1'>
+    </div>
+    <img src="" id='image' alt="">
+
+    <script>
+        $('#input1').change(function () {
+            console.log(this.files, 'this');
+            var file = this.files[0];
+            getPicInfo(file).then(function (res) {
+                $('#image').attr('src', res.url)
+                console.log(res, 'result')
+            })
+        })
+        // 预加载图片
+        function getPicInfo(file) {
+            var reader = new FileReader();
+            var dfd = $.Deferred();
+            reader.onload = function (e) {
+                var url = e.target.result, size = e.total || 0;
+                imgReady(url, function (width, height) {
+                    dfd.resolve({
+                        url: url,
+                        width: width,
+                        height: height,
+                        size: size
+                    });
+                }, function () {
+                    dfd.reject();
+                });
+
+            };
+            reader.onerror = function (e) {
+                dfd.reject();
+            };
+            reader.readAsDataURL(file);
+
+            return dfd.promise();
+        }
+        //获取图片宽 和 高
+        // imgReady('http://pic1.win4000.com/wallpaper/0/548558a740fd0.jpg',function(){console.log('img done')})
+        // 由于javascript无法获取img文件头数据，必须等待其加载完毕后才能获取真实的大小，通过下面这种方法可以事先获得图片的大小。
+        //check中获得图片大小的速度比图片的onload方法要快很多
+        function imgReady(url, success, error) {
+            var width, height, intervalId, check, div,
+                img = new Image(),
+                body = document.body;
+
+            img.src = url;
+
+            // 从缓存中读取
+            if (img.complete) {
+                return success(img.width, img.height);
+            }
+            // 通过占位提前获取图片头部数据
+            if (body) {
+                div = document.createElement('div');
+                div.style.cssText = 'position:absolute;left:-99999px;top:0;';
+                div.appendChild(img);
+                body.appendChild(div);
+                width = img.offsetWidth;
+                height = img.offsetHeight;   
+                check = function () {
+                    console.log(img.offsetWidth,new Date().getTime(), 'img.offsetWidth')
+                    if (img.offsetWidth !== width || img.offsetHeight !== height) {
+                        
+                        clearInterval(intervalId);
+                        console.log('check ok...')
+                        success(img.offsetWidth, img.clientHeight);
+                        img.onload = null;
+                        div.innerHTML = '';
+                        div.parentNode.removeChild(div);
+                    };
+
+                };
+                
+                intervalId = setInterval(check, 1);
+                console.log(+new Date(),'interval');
+            }
+
+            // 加载完毕后方式获取
+            img.onload = function () {
+                console.log('onload ok...')
+                if (img.complete) {
+                    success(img.width, img.height);
+                    img.onload = img.onerror = null;
+                    console.log(+new Date(),'load');
+                    clearInterval(intervalId);
+                    body && img.parentNode && img.parentNode.removeChild(img);
+                }
+
+            };
+
+            // 图片加载错误
+            img.onerror = function () {
+                error && error();
+                clearInterval(intervalId);
+                body && img.parentNode && img.parentNode.removeChild(img);
+            };
+            console.log(+new Date(),'end')
+        }
+
+
+    </script>
+</body>
+
+</html>
