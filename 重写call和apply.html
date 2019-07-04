@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="Generator" content="EditPlus®">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <meta name='viewport' content='width=device-width' />
+    <!--<script type="text/javascript" src='http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'></script>-->
+    <!--<script type="text/javascript" src=' http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js'></script>-->
+    <!-- <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>call and apply</h2>
+
+
+    <script>
+        var xiang = {
+            name: 'xiang'
+        }
+
+        var fen = {
+            name: 'fenfen',
+            sayName() {
+                console.log(this.name);
+                return [...arguments].reduce((base, cur) => base += cur, 0)
+            }
+        }
+
+
+        /*** call ****/
+        console.log(fen.sayName.call(xiang, 1, 2, 3))
+
+        //way1: 将函数赋值给call传入的对象，再进行调用
+        Function.prototype.myCall1 = function (context) {
+            if (typeof this !== 'function') {
+                throw new TypeError('只能给函数用')
+            }
+            context = context || window;
+            context.fn = this;
+            var args = [...arguments].slice(1);
+            const result = context.fn(...args);
+            delete context.fn;
+            return result
+        }
+        console.log(fen.sayName.myCall1(xiang, 1, 2, 3))
+
+        //way2: change this point use bind
+        Function.prototype.myCall2 = function (prop) {
+            if (typeof this !== 'function') {
+                throw new TypeError('只能给函数用')
+            }
+            var args = [...arguments].slice(1);
+            prop = prop || window;
+            var result = this.bind(prop)(...args);
+            return result;
+        }
+        console.log(fen.sayName.myCall2(xiang, 1, 2, 3))
+
+
+        /*** apply ****/
+        console.log(fen.sayName.apply(xiang, [1, 2, 3, 4]))
+
+        //way1: 将函数赋值给call传入的对象，再进行调用
+        Function.prototype.myApply1 = function (context) {
+            if (typeof this !== 'function') {
+                throw new TypeError('只能给函数用')
+            }
+            context = context || window;
+            context.fn = this;
+            var args = arguments[1];
+            const result = context.fn(...args);
+            delete context.fn;
+            return result
+        }
+        console.log(fen.sayName.myApply1(xiang, [1, 2, 3, 4]))
+
+        //way2: change this point use bind
+        Function.prototype.myApply2 = function (prop) {
+            if (typeof this !== 'function') {
+                throw new TypeError('只能给函数用')
+            }
+            var args = arguments[1];
+            prop = prop || window;
+            var result = this.bind(prop)(...args);
+            return result;
+        }
+        console.log(fen.sayName.myApply2(xiang, [1, 2, 3, 4]))
+    </script>
+</body>
+
+</html>
