@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="Generator" content="EditPlus®">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <meta name='viewport' content='width=device-width' />
+    <!--<script type="text/javascript" src='http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'></script>-->
+    <!--<script type="text/javascript" src=' http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js'></script>-->
+    <!-- <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>重写promise</h2>
+
+
+    <script>
+        const PENDING = 'pending';
+        const RESOLVED = 'resolved';
+        const REJECTED = 'rejected';
+
+        function MyPromise(fn) {
+            var $this = this;
+            this.state = PENDING;
+            this.value = null;
+            this.resolvedCallbacks = [];
+            this.rejectedCallbacks = [];
+
+            fn(resolve)
+
+            function resolve(value) {  //resolve函数执行后更改state为RESOLVED
+                if ($this.state == PENDING) {
+                    $this.state = RESOLVED;
+                    $this.value = value;
+                    $this.resolvedCallbacks.forEach(cb => cb(value));
+                }
+            }
+        }
+        //resolve函数执行后更改state为RESOLVED
+        MyPromise.prototype = {
+            then: function (onFulfilled, onRejected) {
+                onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
+                console.log(this.state, 'this.state')
+
+                if (this.state === PENDING) {
+                    this.resolvedCallbacks.push(onFulfilled);
+                    this.rejectedCallbacks.push(onRejected);
+                }
+                if (this.state === RESOLVED) {
+                    onFulfilled(this.value);
+                }
+                if (this.state === REJECTED) {
+                    onRejected(this.value);
+                }
+
+            }
+        }
+        function getList() {
+            return new MyPromise(resolve => {
+                setTimeout(() => {
+                    resolve([1, 2, 3, 4]);
+                }, 1000)
+
+            })
+        }
+
+
+
+        getList().then(res => console.log(res, 'result'));
+    </script>
+</body>
+
+</html>

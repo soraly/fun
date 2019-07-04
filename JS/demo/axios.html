@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <script>
+  
+  axios.get('/yser/asf?id=123').then(res=>{
+      console.log(res,'success')
+  }).catch(res=>console.log(res,'error'))
+
+var url = 'http://m.igrow.cn/oapi/1.1b/school/get'
+    axios.get(url,{params:{
+                        id: undefined,
+                        homepage: true,
+                        _relatedfields: 'profile.*,transferstate.*'
+                    }}).then(function (result) {
+        console.log( result,'result')
+        resolve(result);
+    }).catch(res=>{
+        console.log(res,'errorres');
+    });
+    </script>
+
+    
+</body>
+</html>
