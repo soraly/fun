@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick='test()'>click</button>
+    <script>
+        // func是用户传入需要防抖的函数
+        // wait是等待时间
+        const throttle = (func, wait = 50) => {
+            // 上一次执行该函数的时间
+            let lastTime = 0;
+            return function (...args) {
+                // 当前时间
+                let now = +new Date()
+                // 将当前时间和上一次执行函数时间对比
+                // 如果差值大于设置的等待时间就执行函数
+                if (now - lastTime > wait) {
+                    lastTime = now
+                    func.apply(this, args)
+                }
+            }
+        }
+        
+
+        function myThrottle(fn, wait=100){
+            var lasttime = 0;
+            return function(args){
+                var nowtime = +new Date();
+                if(nowtime - lasttime > wait){
+                    fn.apply(null, arguments);
+                    lasttime = nowtime;
+                }
+            }
+        }
+
+        var fn = myThrottle((name) => {
+                console.log(name +' clicked');
+            }, 1000);
+        function test(){
+            fn('xiang'); 
+        }
+    </script>
+</body>
+
+</html>

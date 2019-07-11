@@ -20,7 +20,7 @@ var url = 'http://m.igrow.cn/oapi/1.1b/school/get'
                         homepage: true,
                         _relatedfields: 'profile.*,transferstate.*'
                     }}).then(function (result) {
-        console.log( result,'result')
+        console.log(result,'result')
         resolve(result);
     }).catch(res=>{
         console.log(res,'errorres');
