@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Iterator</title>
+</head>
+
+<body>
+    <h2>Iterotor</h2>
+    <script>
+        //1. 模拟一个遍历器生成函数，作用就是返回一个遍历器对象（指针对象）
+        function makeIterator(array) {
+            var index = 0;
+            var length = array.length;
+            return {
+                next: () => {
+                    return index < length ? { value: array[index++], done: false } : { value: undefined, done: true }
+                }
+            }
+        }
+
+        var it = makeIterator(['a', 'b']);  //创建一个指针对象
+        it.next() //移动指针 --》 {value:'a', done:false}
+        it.next() //{value:'b', done:false}
+        it.next() //{value:undefined, done:true}
+
+        //直接用for...of遍历 it 会报错，因为it没有Symbol.iterator属性，不是一个“可遍历的”结构
+
+        //2. 模拟一个iterator
+        var obj = {
+            [Symbol.iterator]: function (array) {
+                var index = 0;
+                return {
+                    next: () => {
+                        return index < 10 ? { value: index++, done: false } : { value: index, done: true }
+                    }
+                }
+            }
+        }
+        for (var val of obj) {
+            //console.log(val,'val2')
+        }
+
+        //很多原生数据结构也具有Iterator 接口，比如：
+        //Array, Map, Set, String, TypedArray, arguments, nodeList
+        //数组的iterator
+        var arr = [1, 222, 333, 'xiang', 'fenfen'];
+        var itarr = arr[Symbol.iterator]();
+        console.log(itarr.next().value);
+        console.log(itarr.next().value);
+        console.log(itarr.next().value);
+        console.log(itarr.next().value);
+        console.log(itarr.next().value);
+        console.log(itarr.next().value);
+        //可以写成for...of
+        for (var item of itarr) {
+            console.log(item)
+        }
+
+        //字符串的iterator
+        var str = 'hello,xiang';
+        var itstr = str[Symbol.iterator]();
+        console.log(itstr.next())
+        console.log(itstr.next())
+
+        //用到Iterator接口的场合
+        //对数组和 Set 结构进行解构赋值时，会默认调用Symbol.iterator方法
+        //改写数组的遍历函数
+        var array1 = ['xiang', 'fenfen', 1, 2];
+        array1[Symbol.iterator] = function () {
+            var index = 0;
+            length = this.length;
+            return {
+                next: () => {
+                    return index < length ? { value: this[index++] + "xixi", done: false } : { value: null, done: true }
+                }
+            }
+        }
+        array1.forEach(item=>console.log(item,'item'))
+        var [man1, man2] = array1;
+        console.log(man1, man2);
+
+    </script>
+
+
+</body>
+
+</html>
