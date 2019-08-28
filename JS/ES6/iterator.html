@@ -63,6 +63,7 @@
         //字符串的iterator
         var str = 'hello,xiang';
         var itstr = str[Symbol.iterator]();
+        console.log(JSON.stringify(itstr.next), 'string_iterator');
         console.log(itstr.next())
         console.log(itstr.next())
 
@@ -79,10 +80,23 @@
                 }
             }
         }
-        array1.forEach(item=>console.log(item,'item'))
+        array1.forEach(item => console.log(item, 'item')) //此处遍历不会调用Symbol.iterator
         var [man1, man2] = array1;
         console.log(man1, man2);
 
+        //任意一个对象的Symbol.iterator方法，等于该对象的遍历器生成函数，调用该函数会返回该对象的一个遍历器对象
+        function* myIterator(){
+            yield 'hello';
+            yield 'xiang';
+            return 'hello,xiang';
+        }
+        var obj2 = {};
+        obj2[Symbol.iterator] = myIterator;
+        var tt = obj2[Symbol.iterator]();
+        console.log(tt.next());
+        for(var t of obj2){
+            console.log(t,'t') //注意：此处的return的 hello,xiang 不会被打印出来
+        }
     </script>
 
 
