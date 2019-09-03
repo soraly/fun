@@ -12,16 +12,16 @@
 <body>
     <script>
         function* getData() {
-            var res = yield getGithub('events_url');
-            console.log(res);
+            var res1 = yield getGithub('events_url');
+            var res2 = yield getGithub('gists_url');
+            console.log(res1,'res1');
+            console.log(res2,'res2');
         }
         var result = getData();
-        result.next().value.then(function(res){
-            return res
-        }).then(function(res){
-            return new Promise((resolve)=>{resolve()})
-        }).then(function(res){
-            console.log(3333)
+        result.next().value.then(function(res1){
+            result.next(res1).value.then(function(res2){
+                result.next(res2)
+            })
         })
 
         function getGithub(key) {
