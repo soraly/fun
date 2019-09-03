@@ -148,7 +148,97 @@
         // 1
         // 2
 
-        
+        //Generator函数的return 
+        function* gg() {
+            yield 'hello';
+            yield 'xiang';
+            yield 'helloxiang';
+            return 123;
+        }
+        var it = gg();
+        console.log(it.next());  //{value: "hello", done: false}
+        console.log(it.return('hehe'));  //{value: "hehe", done: true}
+        console.log(it.next());  //{value: undefined, done: true}
+
+        //next()、throw()、return() 的共同点
+        //next()是将yield表达式替换成一个值。
+        //throw()是将yield表达式替换成一个throw语句。
+        //return()是将yield表达式替换成一个return语句。
+
+        //7. yield*
+        function* foo() {
+            yield 'hello';
+            yield 'xiang';
+        }
+        function* bar() {
+            yield 'xixi';
+            for (var val of foo()) {
+                yield val
+            }
+            yield 'haha';
+        }
+        for (val of bar()) {
+            //console.log(val,'val')
+        }
+        //等同于
+        function* bar2() {
+            yield 'xixi';
+            yield* foo()
+            yield 'haha';
+        }
+        for (val of bar2()) {
+            //console.log(val,'val2')
+        }
+
+        //8.对象属性是generator函数时
+        var obj = {
+            myGeneratorMethod: function* () {
+                // ···
+            }
+        }; //等同于====》
+        var obj = {
+            * myGeneratorMethod() {
+
+            }
+        }
+
+        //9. generator的this
+        //有没有办法让 Generator 函数返回一个正常的对象实例，既可以用next方法，又可以获得正常的this?
+
+        //10.Generator 与状态机
+        //以前状态机这样写
+        var ticking = true;
+        var clock = function () {
+            if (ticking)
+                console.log('Tick!');
+            else
+                console.log('Tock!');
+            ticking = !ticking;
+        }
+        //new method
+        function* clock2() {
+            while (true) {
+                console.log('Tick!');
+                yield;
+                console.log('tock!');
+                yield;
+            }
+        }
+        var c = clock2();
+        c.next()
+        c.next()
+
+        //11. generator的应用
+        function* loadUI() {
+            showLoadingScreen();
+            yield loadUIDataAsynchronously();
+            hideLoadingScreen();
+        }
+        var loader = loadUI();
+        // 加载UI
+        loader.next()
+        // 卸载UI
+        loader.next()
     </script>
 
 
