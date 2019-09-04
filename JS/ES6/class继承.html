@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Class继承</title>
+</head>
+
+<body>
+    <script>
+        //1.子类的constructor方法必须调用super方法，否则新建实例会报错。
+        //因为子类自己的this对象，必须先通过父类的构造函数完成塑造,得到与父类同样的实例属性和方法.然后再加上子类自己的实例属性和方法
+        class ColorPoint extends Point {
+        }
+        // 等同于
+        class ColorPoint extends Point {
+            constructor(...args) {
+                super(...args);
+            }
+        }
+
+
+        //2. ES5 的继承，实质是先创造子类的实例对象this，然后再将父类的方法添加到this上面（Parent.apply(this)）。
+        // ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法），然后再用子类的构造函数修改this。
+
+        //3.Object.getPrototypeOf方法可以用来从子类上获取父类。
+        class Hero { }
+        class Spiderman2 extends Hero { }
+        Object.getPrototypeOf(Spiderman2) == Hero
+
+        //4.super————作为函数调用时，代表父类的构造函数；作为对象时，指向父类的原型对象
+        class Hero {
+            sayhi() {
+                console.log('say...again');
+            }
+        }
+        class Spiderman extends Hero {
+            test() {
+                super.sayhi()
+            }
+        }
+        var s1 =new Spiderman()
+        s1.test() //say...again
+        //子类的super作为对象时指向Hero.prototype
+    </script>
+</body>
+
+</html>
