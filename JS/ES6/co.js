@@ -4,7 +4,7 @@ const axios = require('axios');
 function getGithub(key){
     return new Promise((resolve, reject) => {
         axios.get('http://api.github.com/users/github').then((res)=>{
-            resolve(res.data[key])
+            resolve(res.data[key]);
         }).catch(function (error) {
             console.log(error);
           }).finally(error=>error && console.log(error,'err'))
