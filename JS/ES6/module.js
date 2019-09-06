@@ -63,12 +63,14 @@ export function crc32() { // 输出
 import { crc32 } from 'crc32'; // 输入
 //export default命令用于指定模块的默认输出。显然，一个模块只能有一个默认输出
 
+
 //12.export 与 import 的复合写法
 export { foo, bar } from 'my_module';
 //等于
 import { foo, bar } from 'my_module';
 export { foo, bar };
 //此时foo实际上并没有被导入当前模块，只是相当于对外转发了这两个接口，导致当前模块不能直接使用foo和bar。
+
 
 //13.module()
 //require是运行时加载，所以可以动态加载：

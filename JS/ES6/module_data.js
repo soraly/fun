@@ -1,3 +1,5 @@
+console.log('hello....',this)
+
 export default  {
     age: 20,
     sayhi(){
