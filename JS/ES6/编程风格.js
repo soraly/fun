@@ -26,7 +26,8 @@ const a = 'foobar'; //good
 var arr = ['xiang', 'fenfen'];
 var xx = arr[0]; //bad
 var [xx, ff] = arr; //good
-//对象赋值
+
+//5.对象赋值
 function getList(data) {  //bad
     var name = data.name;
     var age = data.age;
@@ -54,3 +55,55 @@ const b = {
 const a = {}; a.name = 'xiang'; //bad
 const b = {}; Object.assign(b, { name: 'xiang' }); //good
 const c = { name: null }; c.name = 'xiang'; //good
+
+//7.尽量简写
+var ref = 'some value';
+const obj = {
+    ref,
+    value: 1,
+    addVal() {
+
+    },
+    [getKey()]: true //属性表达式
+}
+
+// 8.数组
+//使用...拷贝数组
+var arr = [1, 2, 3];
+var copy = [...arr];
+//使用 Array.from 方法，将类似数组的对象转为数组
+
+//9.函数
+//立即执行函数可以写成箭头函数
+(() => {
+    console.log('start...')
+})()
+//使用匿名函数当作参数的场合，尽量用箭头函数代替
+[{ id: 1, name: 'xiang' }, { id: 2, name: 'fenfen' }].map(item => item.name);
+
+//10. 绑定this 
+var fn = method.bind(this);
+var fn2 = (...params) => method.apply(this, params);
+
+//11. 不要使用arguments
+function getData() {
+    Array.prototype.join.call(arguments, '');
+}
+function getData2(...rest) {
+    rest.join('');
+}
+//使用默认值
+function handleThings(opts) { // bad
+    opts = opts || {};
+}
+function handleThings2(opts = {}){ //good
+}
+
+//12. 注意区分Object和Map，只有模拟现实世界的实体对象时才用Object。只是需要key：value结构，用Map，用keys() values() entries()遍历
+
+//13. 如果模块只有一个输出值，就使用export default，如果模块有多个输出值，就不使用export default，export default与普通的export不要同时使用。
+//如果默认输出一个函数，函数名小写。对象则大写
+function hello(){}
+export default hello;
+var Obj = {};
+export default Obj;
