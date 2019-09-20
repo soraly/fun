@@ -1,0 +1,1 @@
+module.exports = {id:123,age:22}
