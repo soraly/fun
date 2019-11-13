@@ -1,11 +1,11 @@
-console.log('hello....',this)
+console.log('hello....', this)
 
-export default  {
+export default {
     age: 20,
-    sayhi(){
+    sayhi() {
         console.log('hi..')
     },
-    sayHello(){
+    sayHello() {
         console.log('hello...')
     }
 }
