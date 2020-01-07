@@ -24,6 +24,7 @@
         const REJECTED = 'rejected';
 
         function MyPromise(fn) {
+            console.log('enter..')
             var $this = this;
             this.state = PENDING;
             this.value = null;
@@ -43,8 +44,9 @@
         //resolve函数执行后更改state为RESOLVED
         MyPromise.prototype = {
             then: function (onFulfilled, onRejected) {
+                
                 onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
-                console.log(this.state, 'this.state')
+                
 
                 if (this.state === PENDING) {
                     this.resolvedCallbacks.push(onFulfilled);
@@ -63,7 +65,7 @@
             return new MyPromise(resolve => {
                 setTimeout(() => {
                     resolve([1, 2, 3, 4]);
-                }, 1000)
+                }, 10000)
 
             })
         }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise</title>
+</head>
+
+<body>
+    <script>
+        const PENDING = 'pending';
+        const RESOLVED = 'resolved';
+        const REJECTED = 'rejected';
+
+        function MyPromise(fn) {
+            this.state = PENDING;
+            this.resolvedCallbacks = [];
+            const resolve = (data)=>{
+                this.state = RESOLVED;
+                this.resolvedCallbacks.forEach(callback=>callback(data))
+
+            }
+            const reject = ()=>{
+                this.state = REJECTED;
+            }
+            fn(resolve, reject)
+
+        }
+        MyPromise.prototype.then = function (callback) {
+            this.resolvedCallbacks.push(callback)
+        }
+
+        var test = function () {
+            return new MyPromise((resolve,reject) => {
+                setTimeout(() => {
+                    var a = 'a';
+                    resolve(a);
+                }, 3000)
+            })
+        }
+        test().then(res => console.log(res, 'res'))
+    </script>
+</body>
+
+</html>
