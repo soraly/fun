@@ -182,7 +182,41 @@
         deserunt laborum voluptatum ab velit optio! Alias!
 
     </div>
+    <button onclick="clickMe()">clickMe</button>
     <script>
+        //防抖
+        function outPut(){
+            var delay = 1000, timer;
+            return function(){
+                clearTimeout(timer);
+                timer = setTimeout(function(){
+                    console.log('clicked...');
+                },delay)
+            }
+        }
+
+        var clickMe = outPut();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         var dom = document.querySelector('#container')
         function fun() {
             console.log('i am scorlll....')
@@ -211,8 +245,11 @@
                 }
             }
         }
-        // dom.addEventListener('scroll', throttle(fun, 1000))
-        dom.addEventListener('scroll', debunce(fun, 1000))
+        //dom.addEventListener('scroll', throttle(fun, 1000))
+         dom.addEventListener('scroll', debunce(fun, 1000))
+
+         
+
     </script>
 </body>
 
